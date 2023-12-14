@@ -1,6 +1,6 @@
 {% set name = "libcurand" %}
-{% set version = "10.3.1.50" %}
-{% set cuda_version = "12.0" %}
+{% set version = "10.3.2.106" %}
+{% set cuda_version = "12.1" %}
 {% set platform = "linux-x86_64" %}  # [linux64]
 {% set platform = "linux-ppc64le" %}  # [ppc64le]
 {% set platform = "linux-sbsa" %}  # [aarch64]
@@ -18,13 +18,13 @@ package:
 
 source:
   url: https://developer.download.nvidia.com/compute/cuda/redist/{{ name }}/{{ platform }}/{{ name }}-{{ platform }}-{{ version }}-archive.{{ extension }}
-  sha256: 7c25712016fdde96011c3370673d9007eddd7231261a9b47f36b213ceb964191  # [linux64]
-  sha256: ac020f6e88105927f96f58ca331d3cddba35b37376f4716e866155c4f56681dd  # [ppc64le]
-  sha256: c7ae331dd6c9936a4e9746abdc222514bbda47a1e495e396b8244b918de377e2  # [aarch64]
-  sha256: 5fb95fbbd1c652e1e2a8c12c41d225117cab3f718c739f0d49d580c11b4a44f1  # [win]
+  sha256: 9941216fad2d419e6172dbd2ee431d77effe671065c08490782fc286ebb364de  # [linux64]
+  sha256: fa3c5424bba7f7ea4bef08278099f2c0cb63eeff80ee51d0fea9965315732817  # [ppc64le]
+  sha256: 525d997d74b391a3484f9c71e7a6e51a136267b8a2dddbfef1420134f3011827  # [aarch64]
+  sha256: 9d899a09c9d227d995b7fd2a4e9f0c16abfe1e0543f41b09ccb05802c9fa107b  # [win]
 
 build:
-  number: 1
+  number: 0
   binary_relocation: false
   skip: true  # [osx]
 
@@ -159,4 +159,4 @@ about:
 
 extra:
   recipe-maintainers:
-    - adibbley
+    - conda-forge/cuda
