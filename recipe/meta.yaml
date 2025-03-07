@@ -1,5 +1,5 @@
 {% set name = "libcurand" %}
-{% set version = "10.3.9.55" %}
+{% set version = "10.3.9.90" %}
 {% set cuda_version = "12.8" %}
 {% set platform = "linux-x86_64" %}  # [linux64]
 {% set platform = "linux-ppc64le" %}  # [ppc64le]
@@ -18,9 +18,9 @@ package:
 
 source:
   url: https://developer.download.nvidia.com/compute/cuda/redist/{{ name }}/{{ platform }}/{{ name }}-{{ platform }}-{{ version }}-archive.{{ extension }}
-  sha256: 91923b0e38dc3d0e14c667800ebf95ee7cd290387effc7a0a559144004b5504f  # [linux64]
-  sha256: fb56d29e574b5b66cd25ba3b36fe9e91ee718fdd3bcbbb1f50ff0034475c5cbc  # [aarch64]
-  sha256: 239172718cca32f153ef6fd27e3950795463732b0f24df6282ba6bf207a9c29d  # [win]
+  sha256: 32a5ec30be446c1b7228d1bc502b2f029cc8b59a5e362c70d960754fa646778b  # [linux64]
+  sha256: 2fed8d9d8fa8c7189dbd9e04dc5c1b7655cd98b834a902a76afc39f7a8635427  # [aarch64]
+  sha256: 46eba36c20748b21a5927b569b943337dd18485132119dfb39a5bcda4edb12e2  # [win]
 
 build:
   number: 0
