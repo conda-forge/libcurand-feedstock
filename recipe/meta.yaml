@@ -23,7 +23,7 @@ source:
   sha256: 46eba36c20748b21a5927b569b943337dd18485132119dfb39a5bcda4edb12e2  # [win]
 
 build:
-  number: 0
+  number: 1
   binary_relocation: false
   skip: true  # [osx or ppc64le]
 
@@ -99,13 +99,13 @@ outputs:
         - arm-variant * {{ arm_variant_type }}  # [aarch64]
         - libcurand-static >={{ version }}      # [linux]
     test:
-       commands:
-         - test -L $PREFIX/lib/libcurand.so                                    # [linux]
-         - test -f $PREFIX/targets/{{ target_name }}/include/curand.h          # [linux]
-         - test -L $PREFIX/targets/{{ target_name }}/lib/libcurand.so          # [linux]
-         - test -f $PREFIX/targets/{{ target_name }}/lib/stubs/libcurand.so    # [linux]
-         - if not exist %LIBRARY_INC%\curand.h exit 1                          # [win]
-         - if not exist %LIBRARY_LIB%\curand.lib exit 1                        # [win]
+      commands:
+        - test -L $PREFIX/lib/libcurand.so                                     # [linux]
+        - test -f $PREFIX/targets/{{ target_name }}/include/curand.h           # [linux]
+        - test -L $PREFIX/targets/{{ target_name }}/lib/libcurand.so           # [linux]
+        - test -f $PREFIX/targets/{{ target_name }}/lib/stubs/libcurand.so     # [linux]
+        - if not exist %LIBRARY_INC%\curand.h exit 1                           # [win]
+        - if not exist %LIBRARY_LIB%\curand.lib exit 1                         # [win]
     about:
       home: https://developer.nvidia.com/curand
       license: LicenseRef-NVIDIA-End-User-License-Agreement
@@ -118,7 +118,7 @@ outputs:
 
   - name: libcurand-static
     build:
-      skip: True  # [not linux]
+      skip: true  # [not linux]
     files:
       - targets/{{ target_name }}/lib/libcurand_static.a
     requirements:
