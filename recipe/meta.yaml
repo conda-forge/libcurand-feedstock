@@ -23,7 +23,7 @@ source:
   sha256: d3c518485188990666cf9ad848dab40cd0f686a6760344a52fc9eed24acc5b49  # [win]
 
 build:
-  number: 0
+  number: 1
   binary_relocation: false
   skip: true  # [osx or ppc64le]
 
