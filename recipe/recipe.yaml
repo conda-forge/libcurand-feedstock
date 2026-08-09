@@ -1,0 +1,205 @@
+schema_version: 1
+
+context:
+  version: 10.4.3.29
+  cuda_version: "13.3"
+  soname_version: "10"
+  target_name: ${{ "x64" if win else "sbsa-linux" if aarch64 else "x86_64-linux" }}
+
+recipe:
+  name: libcurand-split
+  version: ${{ version }}
+
+source:
+  - if: linux64
+    then:
+      url: https://developer.download.nvidia.com/compute/cuda/redist/libcurand/linux-x86_64/libcurand-linux-x86_64-${{ version }}-archive.tar.xz
+      sha256: 0218e62ab413e435dcd0274ec8e63b62214e6aba8519201061d1597e73caadbb
+  - if: aarch64
+    then:
+      url: https://developer.download.nvidia.com/compute/cuda/redist/libcurand/linux-sbsa/libcurand-linux-sbsa-${{ version }}-archive.tar.xz
+      sha256: 3c2245e848ff8948663646ad7870cc8451b7cf1726758bedff7c123011126e4b
+  - if: win
+    then:
+      url: https://developer.download.nvidia.com/compute/cuda/redist/libcurand/windows-x86_64/libcurand-windows-x86_64-${{ version }}-archive.zip
+      sha256: d3c518485188990666cf9ad848dab40cd0f686a6760344a52fc9eed24acc5b49
+
+build:
+  number: 1
+  skip: osx or ppc64le or riscv64
+  dynamic_linking:
+    binary_relocation: false
+
+outputs:
+  - staging:
+      name: libcurand-build
+    build:
+      script: build
+    requirements:
+      build:
+        - ${{ stdlib('c') }}
+        - if: linux
+          then:
+            - cf-nvidia-tools 1.*
+            - patchelf <0.18.0
+
+  - package:
+      name: libcurand
+    inherit:
+      from: libcurand-build
+      run_exports: false
+    build:
+      files:
+        - if: linux
+          then:
+            - lib/libcurand.so.*
+            - targets/${{ target_name }}/lib/libcurand.so.*
+        - if: win
+          then: Library/bin/curand*.dll
+    requirements:
+      build:
+        - ${{ compiler('c') }}
+        - ${{ compiler('cxx') }}
+        - ${{ stdlib('c') }}
+        - if: aarch64
+          then: arm-variant * ${{ arm_variant_type }}
+      host:
+        - cuda-version ==${{ cuda_version }}
+      run:
+        - ${{ pin_compatible('cuda-version', upper_bound='x.x') }}
+      run_constraints:
+        - if: aarch64
+          then: arm-variant * ${{ arm_variant_type }}
+    tests:
+      - package_contents:
+          files:
+            - if: linux
+              then:
+                - lib/libcurand.so.${{ soname_version }}
+                - lib/libcurand.so.${{ version }}
+                - targets/${{ target_name }}/lib/libcurand.so.${{ soname_version }}
+                - targets/${{ target_name }}/lib/libcurand.so.${{ version }}
+            - if: win
+              then: Library/bin/curand64_${{ soname_version }}.dll
+      - if: linux
+        then:
+          files:
+            recipe:
+              - test-rpath.sh
+          requirements:
+            run:
+              - patchelf
+          script:
+            - bash test-rpath.sh
+    about:
+      homepage: https://developer.nvidia.com/curand
+      documentation: https://docs.nvidia.com/cuda/curand/
+      license: LicenseRef-NVIDIA-End-User-License-Agreement
+      license_file: LICENSE
+      summary: cuRAND native runtime libraries
+      description: cuRAND native runtime libraries
+
+  - package:
+      name: libcurand-dev
+    inherit:
+      from: libcurand-build
+      run_exports: false
+    build:
+      files:
+        - if: linux
+          then:
+            - lib/libcurand.so
+            - lib/pkgconfig
+            - targets/${{ target_name }}/include
+            - targets/${{ target_name }}/lib/libcurand.so
+            - targets/${{ target_name }}/lib/stubs
+        - if: win
+          then:
+            - Library/include
+            - Library/lib/${{ target_name }}
+    requirements:
+      build:
+        - ${{ compiler('c') }}
+        - ${{ compiler('cxx') }}
+        - ${{ stdlib('c') }}
+        - if: aarch64
+          then: arm-variant * ${{ arm_variant_type }}
+      host:
+        - cuda-version ==${{ cuda_version }}
+      run:
+        - ${{ pin_compatible('cuda-version', upper_bound='x.x') }}
+        - ${{ pin_subpackage('libcurand', exact=True) }}
+      run_exports:
+        - ${{ pin_subpackage('libcurand', upper_bound='x') }}
+      run_constraints:
+        - if: aarch64
+          then: arm-variant * ${{ arm_variant_type }}
+        - if: linux
+          then: libcurand-static >=${{ version }}
+    tests:
+      - package_contents:
+          files:
+            - if: linux
+              then:
+                - lib/libcurand.so
+                - targets/${{ target_name }}/include/curand.h
+                - targets/${{ target_name }}/lib/libcurand.so
+                - targets/${{ target_name }}/lib/stubs/libcurand.so
+            - if: win
+              then:
+                - Library/include/curand.h
+                - Library/lib/${{ target_name }}/curand.lib
+    about:
+      homepage: https://developer.nvidia.com/curand
+      documentation: https://docs.nvidia.com/cuda/curand/
+      license: LicenseRef-NVIDIA-End-User-License-Agreement
+      license_file: LICENSE
+      summary: cuRAND development files
+      description: cuRAND development files
+
+  - package:
+      name: libcurand-static
+    inherit:
+      from: libcurand-build
+      run_exports: false
+    build:
+      skip: not linux
+      files:
+        - targets/${{ target_name }}/lib/libcurand_static.a
+    requirements:
+      build:
+        - ${{ compiler('c') }}
+        - ${{ compiler('cxx') }}
+        - ${{ stdlib('c') }}
+        - if: aarch64
+          then: arm-variant * ${{ arm_variant_type }}
+      host:
+        - cuda-version ==${{ cuda_version }}
+      run:
+        - ${{ pin_compatible('cuda-version', upper_bound='x.x') }}
+      run_constraints:
+        - if: aarch64
+          then: arm-variant * ${{ arm_variant_type }}
+    tests:
+      - package_contents:
+          files:
+            - targets/${{ target_name }}/lib/libcurand_static.a
+    about:
+      homepage: https://developer.nvidia.com/curand
+      documentation: https://docs.nvidia.com/cuda/curand/
+      license: LicenseRef-NVIDIA-End-User-License-Agreement
+      license_file: LICENSE
+      summary: cuRAND static libraries
+      description: cuRAND static libraries
+
+about:
+  homepage: https://developer.nvidia.com/curand
+  documentation: https://docs.nvidia.com/cuda/curand/
+  license: LicenseRef-NVIDIA-End-User-License-Agreement
+  license_file: LICENSE
+  summary: cuRAND native runtime libraries
+  description: cuRAND native runtime libraries
+
+extra:
+  recipe-maintainers:
+    - conda-forge/cuda
