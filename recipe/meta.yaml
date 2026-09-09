@@ -1,16 +1,22 @@
 {% set name = "libcurand" %}
-{% set version = "10.4.3.29" %}
-{% set cuda_version = "13.3" %}
+{% set version = "10.4.4.49" %}
+{% set cuda_version = "13.4" %}
 {% set platform = "linux-x86_64" %}  # [linux64]
 {% set platform = "linux-ppc64le" %}  # [ppc64le]
 {% set platform = "linux-sbsa" %}  # [aarch64]
-{% set platform = "windows-x86_64" %}  # [win]
+{% set platform = "windows-x86_64" %}  # [win64]
+{% set platform = "windows-arm64" %}  # [win and arm64]
 {% set target_name = "x86_64-linux" %}  # [linux64]
 {% set target_name = "ppc64le-linux" %}  # [ppc64le]
 {% set target_name = "sbsa-linux" %}  # [aarch64]
-{% set target_name = "x64" %}  # [win]
+{% set target_name = "x64" %}  # [win64]
+{% set target_name = "arm64" %}  # [win and arm64]
 {% set extension = "tar.xz" %}  # [not win]
 {% set extension = "zip" %}  # [win]
+{% set sha256 = "f08512d67cf25de22026638127a1635280e594b03a92f0592d33acfacad4c7fc" %}  # [linux64]
+{% set sha256 = "8f7fade9f74a2b83b674d4f967f49f884ac0d81c9e6b32c472b048653acf00c8" %}  # [aarch64]
+{% set sha256 = "9adf8616c372a0a63df881f25938d624002f5df2d99e51b43d56219c5894a079" %}  # [win64]
+{% set sha256 = "744302777afa6f806300af466cb74726de9d7990434dbcee70915fe32e57463e" %}  # [win and arm64]
 
 package:
   name: {{ name|lower }}-split
@@ -18,9 +24,7 @@ package:
 
 source:
   url: https://developer.download.nvidia.com/compute/cuda/redist/{{ name }}/{{ platform }}/{{ name }}-{{ platform }}-{{ version }}-archive.{{ extension }}
-  sha256: 0218e62ab413e435dcd0274ec8e63b62214e6aba8519201061d1597e73caadbb  # [linux64]
-  sha256: 3c2245e848ff8948663646ad7870cc8451b7cf1726758bedff7c123011126e4b  # [aarch64]
-  sha256: d3c518485188990666cf9ad848dab40cd0f686a6760344a52fc9eed24acc5b49  # [win]
+  sha256: {{ sha256 }}
 
 build:
   number: 0
