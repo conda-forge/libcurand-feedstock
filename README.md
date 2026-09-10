@@ -47,31 +47,73 @@ conda config --add channels conda-forge
 conda config --set channel_priority strict
 ```
 
-Once the `conda-forge` channel has been enabled, `libcurand, libcurand-dev, libcurand-static` can be installed with `conda`:
+How to use
+----------
+
+<details>
+<summary>With conda</summary>
 
 ```
 conda install libcurand libcurand-dev libcurand-static
 ```
 
-or with `mamba`:
+</details>
+
+<details>
+<summary>With mamba</summary>
 
 ```
 mamba install libcurand libcurand-dev libcurand-static
 ```
 
-It is possible to list all of the versions of `libcurand` available on your platform with `conda`:
+</details>
+
+<details>
+<summary>With pixi</summary>
+
+```
+# for adding to your local project
+pixi add libcurand libcurand-dev libcurand-static
+# for installing globally
+pixi global install libcurand libcurand-dev libcurand-static
+```
+
+</details>
+
+Search package versions
+-----------------------
+
+It is possible to list all of the versions of `libcurand` available on your platform:
+
+<details>
+<summary>With conda</summary>
 
 ```
 conda search libcurand --channel conda-forge
 ```
 
-or with `mamba`:
+</details>
+
+<details>
+<summary>With mamba</summary>
 
 ```
 mamba search libcurand --channel conda-forge
 ```
 
-Alternatively, `mamba repoquery` may provide more information:
+</details>
+
+<details>
+<summary>With pixi</summary>
+
+```
+pixi search libcurand --channel conda-forge
+```
+
+</details>
+
+<details>
+<summary>With mamba repoquery, which may provide more information</summary>
 
 ```
 # Search all versions available on your platform:
@@ -83,6 +125,8 @@ mamba repoquery whoneeds libcurand --channel conda-forge
 # List dependencies of `libcurand`:
 mamba repoquery depends libcurand --channel conda-forge
 ```
+
+</details>
 
 
 About conda-forge
