@@ -1,5 +1,5 @@
 {% set name = "libcurand" %}
-{% set version = "10.4.4.49" %}
+{% set version = "10.4.4.72" %}
 {% set cuda_version = "13.4" %}
 {% set platform = "linux-x86_64" %}  # [linux64]
 {% set platform = "linux-ppc64le" %}  # [ppc64le]
@@ -13,10 +13,10 @@
 {% set target_name = "arm64" %}  # [win and arm64]
 {% set extension = "tar.xz" %}  # [not win]
 {% set extension = "zip" %}  # [win]
-{% set sha256 = "f08512d67cf25de22026638127a1635280e594b03a92f0592d33acfacad4c7fc" %}  # [linux64]
-{% set sha256 = "8f7fade9f74a2b83b674d4f967f49f884ac0d81c9e6b32c472b048653acf00c8" %}  # [aarch64]
-{% set sha256 = "9adf8616c372a0a63df881f25938d624002f5df2d99e51b43d56219c5894a079" %}  # [win64]
-{% set sha256 = "744302777afa6f806300af466cb74726de9d7990434dbcee70915fe32e57463e" %}  # [win and arm64]
+{% set sha256 = "6f725f9187dc5f675308b830f786c163f5b1b499d86986f94fb60aa701c13c0b" %}  # [linux64]
+{% set sha256 = "2968e2d86dce64896ee3c2ac86c9e0f7decec4a0f157c8d73e3d0f31582e9e0c" %}  # [aarch64]
+{% set sha256 = "5f15b55cb83938b36a1f01aa9fb32715984e8495c2217081387a0c8ca836ff62" %}  # [win64]
+{% set sha256 = "1e7ef9506c5021a1f9645bf70cfb7cf60021bb3ebc4e34d80b3f36d240bced9b" %}  # [win and arm64]
 
 package:
   name: {{ name|lower }}-split
@@ -27,7 +27,7 @@ source:
   sha256: {{ sha256 }}
 
 build:
-  number: 1
+  number: 0
   binary_relocation: false
   skip: true  # [osx or ppc64le]
 
